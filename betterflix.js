@@ -1,34 +1,21 @@
-console.log("Starting Betterflix111...");
+console.log("Starting Betterflix...");
 
 const observer = new MutationObserver(remove_bigrows);
 const config = { attributes: false, childList: true, subtree: true };
 
-Element.prototype.remove = function() {
-    this.parentElement.removeChild(this);
-}
-NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
-    for(var i = this.length - 1; i >= 0; i--) {
-        if(this[i] && this[i].parentElement) {
-            this[i].parentElement.removeChild(this[i]);
-        }
-    }
-}
-
 function remove_bigrows(mutationlist, observer) {
-    console.log("observer observed something");
-
-    let selected = document.querySelectorAll(`[data-list-context="bigRow"]`);
-
-    for (item of selected) {
-        item.remove();
-    }
-}
-
-function remove_videoplayers(mutationlist, observer) {
-    let selected = document.querySelectorAll(".VideoPlayer");
-
-    for (item of selected) {
-        item.remove();
+    for (mutation of mutationlist) {
+        if (mutation.addedNodes.length > 0) {
+            for (item of mutation.addedNodes) {
+                if (item.dataset.listContext == "bigRow") {
+                    item.remove();
+                }
+                else if (item.nodeName == "VIDEO") {
+                    item.remove();
+                    console.log("removed VIDEO from expanded title-card");
+                }
+            }
+        }
     }
 }
 
@@ -36,7 +23,7 @@ function remove_billboard() {
     let selected = document.querySelector(`.volatile-billboard-animations-container`);
 
     if (selected == null) {
-        window.setTimeout(remove_billboard, 500);
+        window.setTimeout(remove_billboard, 250);
     }
     else {
         selected.remove();
@@ -44,14 +31,14 @@ function remove_billboard() {
 }
 
 function start() {
-    let mainView = document.querySelector(".mainView");
+    let mainView = document.querySelector(".is-fullbleed");
 
     if (mainView != null) {
         observer.observe(mainView, config);
         remove_billboard();
     }
     else {
-        window.setTimeout(start, 500);
+        window.setTimeout(start, 200);
         console.log("Retrying to grab mainView...");
     }
 }

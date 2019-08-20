@@ -14,5 +14,21 @@
             "matches": ["*://www.netflix.com/browse", "*://netflix.com/browse"],
             "js": ["betterflix.js"]
         }
-    ]
+    ],
+
+    "background": {
+        "scripts": ["background.js"]
+    },
+
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "<all_urls>"
+    ],
+
+    "applications": {
+        "gecko": {
+            "id": "betterflix@jellywx.com"
+        }
+    }
 }
