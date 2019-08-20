@@ -1,0 +1,18 @@
+{
+    "manifest_version": 2,
+    "name": "Betterflix",
+    "version": "1.0",
+
+    "description": "Improves Netflix UI",
+
+    "icons": {
+
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["*://www.netflix.com/browse", "*://netflix.com/browse"],
+            "js": ["betterflix.js"]
+        }
+    ]
+}
