@@ -1,5 +1,7 @@
 function log_blocks(requestdet) {
-    return {cancel: true}
+    if (requestdet.originUrl.startsWith("https://www.netflix.com/browse")) {
+        return {cancel: true}
+    }
 }
 
 browser.webRequest.onBeforeRequest.addListener(
