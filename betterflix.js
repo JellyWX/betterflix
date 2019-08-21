@@ -50,7 +50,7 @@ function check_for_navigate(href) {
         return
     }
     else if (current_href != href) {
-        location.reload();
+        start();
     }
     else {
         window.setTimeout(function() {check_for_navigate(current_href)}, 100);
@@ -59,4 +59,4 @@ function check_for_navigate(href) {
 
 start();
 
-window.addEventListener('popstate', function() {location.reload();});
+window.addEventListener('popstate', function() { start(); });
