@@ -11,7 +11,7 @@
 
     "content_scripts": [
         {
-            "matches": ["*://www.netflix.com/browse", "*://www.netflix.com/browse?*"],
+            "matches": ["https://www.netflix.com/browse", "https://www.netflix.com/browse/*", "https://www.netflix.com/browse?*", "https://www.netflix.com/watch/*"],
             "js": ["betterflix.js"]
         }
     ],
@@ -22,6 +22,7 @@
 
     "permissions": [
         "webRequest",
+        "webNavigation",
         "webRequestBlocking",
         "<all_urls>"
     ],
