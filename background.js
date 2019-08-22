@@ -1,11 +1,15 @@
+let is_blocking = true;
+
 function log_blocks(requestdet) {
-    if (requestdet.originUrl.startsWith("https://www.netflix.com/browse")) {
+    if (is_blocking) {
         return {cancel: true}
     }
 }
 
-function check_for_redir(requestdet) {
-    console.log("accessed " + requestdet.url);
+function handle_message(request, sender, sendresponse) {
+    //console.log("received blocking notice");
+
+    is_blocking = request.blocking;
 }
 
 browser.webRequest.onBeforeRequest.addListener(
@@ -14,7 +18,4 @@ browser.webRequest.onBeforeRequest.addListener(
     ["blocking"]
 );
 
-browser.webNavigation.onBeforeNavigate.addListener(
-    check_for_redir,
-    {url: [{hostContains: "netflix.com"}]}
-);
+browser.runtime.onMessage.addListener(handle_message);

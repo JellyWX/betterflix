@@ -1,5 +1,3 @@
-console.log("r");
-
 const observer = new MutationObserver(remove_bigrows);
 const config = { attributes: false, childList: true, subtree: true };
 
@@ -7,12 +5,11 @@ function remove_bigrows(mutationlist, observer) {
     for (mutation of mutationlist) {
         if (mutation.addedNodes.length > 0) {
             for (item of mutation.addedNodes) {
-                if (item.dataset.listContext == "bigRow") {
+                if (item.dataset.listContext == `bigRow`) {
                     item.remove();
                 }
-                else if (item.nodeName == "VIDEO") {
+                else if (item.nodeName == `VIDEO`) {
                     item.remove();
-                    console.log("removed VIDEO from expanded title-card");
                 }
             }
         }
@@ -31,7 +28,9 @@ function remove_billboard() {
 }
 
 function start() {
-    let mainView = document.querySelector(".is-fullbleed");
+    browser.runtime.sendMessage({blocking: true});
+
+    let mainView = document.querySelector(`.is-fullbleed`);
 
     if (mainView != null) {
         observer.observe(mainView, config);
@@ -46,7 +45,8 @@ function start() {
 function check_for_navigate(href) {
     let current_href = location.href;
 
-    if (current_href.includes("watch")) {
+    if (current_href.includes(`watch`)) {
+        browser.runtime.sendMessage({blocking: false});
         return
     }
     else if (current_href != href) {
@@ -59,4 +59,4 @@ function check_for_navigate(href) {
 
 start();
 
-window.addEventListener('popstate', function() { start(); });
+window.addEventListener(`popstate`, function() { start(); });
