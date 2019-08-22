@@ -22,7 +22,6 @@
 
     "permissions": [
         "webRequest",
-        "webNavigation",
         "webRequestBlocking",
         "<all_urls>"
     ],
