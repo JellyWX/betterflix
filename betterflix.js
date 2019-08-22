@@ -27,6 +27,14 @@ function remove_billboard() {
     }
 }
 
+function one_time_remove_bigrows() {
+    let selected = document.querySelector(`[data-list-context="bigRow"]`);
+
+    if (selected != null) {
+        selected.remove();
+    }
+}
+
 function start() {
     browser.runtime.sendMessage({blocking: true});
 
@@ -35,6 +43,7 @@ function start() {
     if (mainView != null) {
         observer.observe(mainView, config);
         remove_billboard();
+        one_time_remove_bigrows();
         check_for_navigate(location.href);
     }
     else {
@@ -53,7 +62,7 @@ function check_for_navigate(href) {
         start();
     }
     else {
-        window.setTimeout(function() {check_for_navigate(current_href)}, 100);
+        window.setTimeout(function() { check_for_navigate(current_href); }, 100);
     }
 }
 
