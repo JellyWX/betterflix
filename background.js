@@ -7,8 +7,6 @@ function log_blocks(requestdet) {
 }
 
 function handle_message(request, sender, sendresponse) {
-    //console.log("received blocking notice");
-
     is_blocking = request.blocking;
 }
 

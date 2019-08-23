@@ -1,14 +1,28 @@
+const inputs = ["autoplay", "billboard", "bigrow"];
+
 function save_options(e) {
-    for (x of ["autoplay", "billboard", "bigrow"]) {
-        browser.storage.sync.set(JSON.parse(`{"${x}": ${document.getElementById(x).value == "checked"}}`));
+    let settings = [];
+    for (x of inputs) {
+        settings.push(document.getElementById(x).checked);
     }
-    e.preventDefault();
+    browser.storage.sync.set({settings});
+
+    if (e != null) {
+        e.preventDefault();
+    }
 }
 
 function restore_options() {
-    for (x of ["autoplay", "billboard", "bigrow"]) {
-        browser.storage.sync.get(x).then((res) => {document.getElementById(x).value = res.blocked ? "checked" : ""});
-    }
+    browser.storage.sync.get("settings").then((res) => {
+        if (res.settings == undefined) {
+            save_options(null);
+        }
+        else {
+            for (let x = 0; x < inputs.length; ++ x) {
+                document.getElementById(inputs[x]).checked = res.settings[x];
+            }
+        }
+    }, () => {});
 }
 
 document.addEventListener("DOMContentLoaded", restore_options);

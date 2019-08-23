@@ -1,14 +1,22 @@
+const inputs = ["autoplay", "billboard", "bigrow"];
+
 const observer = new MutationObserver(remove_bigrows);
 const config = { attributes: false, childList: true, subtree: true };
+
+var settings = {
+    autoplay: true,
+    billboard: true,
+    bigrow: true,
+};
 
 function remove_bigrows(mutationlist, observer) {
     for (mutation of mutationlist) {
         if (mutation.addedNodes.length > 0) {
             for (item of mutation.addedNodes) {
-                if (item.dataset.listContext == `bigRow`) {
+                if (item.dataset.listContext == `bigRow` && settings.bigrow) {
                     item.remove();
                 }
-                else if (item.nodeName == `VIDEO`) {
+                else if (item.nodeName == `VIDEO` && settings.autoplay) {
                     item.remove();
                 }
             }
@@ -36,19 +44,29 @@ function one_time_remove_bigrows() {
 }
 
 function start() {
-    browser.runtime.sendMessage({blocking: true});
+    browser.storage.sync.get("settings").then((res) => {
+        for (let x = 0; x < inputs.length; ++ x) {
+            settings[inputs[x]] = res.settings[x];
+        }
 
-    let mainView = document.querySelector(`.is-fullbleed`);
+        browser.runtime.sendMessage({blocking: settings.autoplay});
 
-    if (mainView != null) {
-        observer.observe(mainView, config);
-        remove_billboard();
-        one_time_remove_bigrows();
-        check_for_navigate(location.href);
-    }
-    else {
-        window.setTimeout(start, 250);
-    }
+        let mainView = document.querySelector(`.is-fullbleed`);
+
+        if (mainView != null) {
+            observer.observe(mainView, config);
+            if (settings.billboard) {
+                remove_billboard();
+            }
+            if (settings.bigrow) {
+                one_time_remove_bigrows();
+            }
+            check_for_navigate(location.href);
+        }
+        else {
+            window.setTimeout(start, 250);
+        }
+    });
 }
 
 function check_for_navigate(href) {
