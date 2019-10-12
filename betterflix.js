@@ -49,24 +49,25 @@ function start() {
             settings[inputs[x]] = res.settings[x];
         }
 
-        browser.runtime.sendMessage({blocking: settings.autoplay});
+    }, (err) => {});
 
-        let mainView = document.querySelector(`.is-fullbleed`);
+    browser.runtime.sendMessage({blocking: settings.autoplay});
 
-        if (mainView != null) {
-            observer.observe(mainView, config);
-            if (settings.billboard) {
-                remove_billboard();
-            }
-            if (settings.bigrow) {
-                one_time_remove_bigrows();
-            }
-            check_for_navigate(location.href);
+    let mainView = document.querySelector(`.is-fullbleed`);
+
+    if (mainView != null) {
+        observer.observe(mainView, config);
+        if (settings.billboard) {
+            remove_billboard();
         }
-        else {
-            window.setTimeout(start, 250);
+        if (settings.bigrow) {
+            one_time_remove_bigrows();
         }
-    });
+        check_for_navigate(location.href);
+    }
+    else {
+        window.setTimeout(start, 250);
+    }
 }
 
 function check_for_navigate(href) {
@@ -80,7 +81,7 @@ function check_for_navigate(href) {
         start();
     }
     else {
-        window.setTimeout(function() { check_for_navigate(current_href); }, 100);
+        window.setTimeout(function() { check_for_navigate(current_href); }, 200);
     }
 }
 
